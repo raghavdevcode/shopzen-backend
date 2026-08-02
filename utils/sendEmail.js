@@ -2,11 +2,13 @@ const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   host: process.env.BREVO_HOST,
-  port: process.env.BREVO_PORT,
+  port: Number(process.env.BREVO_PORT),       // string -> number
+  secure: process.env.BREVO_SECURE === "true", // "true" string ko boolean me convert
   auth: {
     user: process.env.BREVO_USER,
-    pass: process.env.BREVO_PASS
-  }
+    pass: process.env.BREVO_PASS,
+  },
+  connectionTimeout: 10000, // 10 sec me fail ho jaye, latak na rahe
 });
 
 const sendEmail = async ({ to, subject, html }) => {
